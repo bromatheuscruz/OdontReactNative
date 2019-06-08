@@ -60,7 +60,7 @@ export default class ProfileScreen extends Component<Props, State> {
                     <View style={styles.optionRowStyle}>
                         <Text style={styles.spanRowTextStyle}>{Strings.LOGOUT}</Text>
                         <Icon
-                            name={'exit-to-app'}
+                            name={Styles.icons.EXIT_TO_APP}
                             size={30}
                             color={Styles.colors.gray}
                             style={styles.iconOptionStyle} />

@@ -26,6 +26,7 @@ export default {
         ATTACH_MONEY: 'attach-money',
         CHAT: 'chat',
         LOCK: 'lock',
-        NAVIGATE_NEXT: 'navigate-next'
+        NAVIGATE_NEXT: 'navigate-next',
+        EXIT_TO_APP: 'exit-to-app'
     }
 }
