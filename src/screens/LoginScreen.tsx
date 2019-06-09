@@ -1,31 +1,38 @@
 import React, { Component } from "react";
-import {
-    StyleSheet,
-    View,
-    TextInput,
-    Text,
-    TouchableOpacity,
-    ViewStyle
-} from "react-native";
-import {
-    NavigationScreenConfig,
-    NavigationScreenOptions,
-    NavigationScreenProp
-} from 'react-navigation';
+import { StyleSheet, View, TextInput, Text, TouchableOpacity, ViewStyle } from "react-native";
+import { NavigationScreenConfig, NavigationScreenOptions, NavigationScreenProp } from 'react-navigation';
 import Styles from "../Styles";
 import Strings from "../Strings";
-import { LoginUserData } from '../models/LoginUserData'
+import { LoginUserData } from '../models/LoginUserData';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+import { ApplicationState } from '../store';
+import { Identity } from "../store/ducks/identity/types";
+import * as IdentityActions from './../store/ducks/identity/actions';
 
-interface Props { 
+interface StateProps {
+    identity: Identity;
+    loading: boolean;
+    hasError: boolean;
+}
+
+interface DispatchProps {
+    authRequest(data: LoginUserData): void;
+    authClear(): void;
+}
+
+interface OwnProps {
     navigation: NavigationScreenProp<State>;
 }
+
+type Props = StateProps & DispatchProps & OwnProps;
 
 interface State {
     user: LoginUserData;
     canSubmitForm: boolean;
 }
 
-export default class LoginScreen extends Component<Props, State> {
+class LoginScreen extends Component<Props, State> {
 
     state = {
         user: {
@@ -59,13 +66,15 @@ export default class LoginScreen extends Component<Props, State> {
     }
 
     private onLoginPressHandler = (): void => {
-        const { navigation } = this.props;
-        navigation.push('mainStack')
+        const { navigation, authRequest } = this.props;
+        const { user } = this.state;
+        navigation.push('mainStack');
     }
 
 
     render() {
         const { user, canSubmitForm } = this.state;
+        const { identity, loading, hasError } = this.props;
         const getOpacityByFormStatus = (): ViewStyle => ({ opacity: canSubmitForm ? 1 : 0.5 })
 
         return (
@@ -99,10 +108,10 @@ export default class LoginScreen extends Component<Props, State> {
                             onSubmitEditing={this.onLoginPressHandler}
                         />
                     </View>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         onPress={this.onLoginPressHandler}
                         disabled={!canSubmitForm}
-                        >
+                    >
                         <View style={[styles.buttonStyle, getOpacityByFormStatus()]}>
                             <Text style={styles.spanTextButtonStyle}>{Strings.ENTER}</Text>
                         </View>
@@ -175,4 +184,14 @@ const styles = StyleSheet.create({
         marginTop: 30,
         alignSelf: 'center'
     }
-})
+});
+
+const mapStateToProps = (state: ApplicationState) => ({
+    identity: state.identity.data,
+    loading: state.identity.loading,
+    hasError: state.identity.hasError
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators(IdentityActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

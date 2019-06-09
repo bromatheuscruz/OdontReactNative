@@ -13,4 +13,7 @@ export default {
         HOME: 'Home',
         LOGIN: 'Login'
     },
+    api: {
+        LOGIN: '/login'
+    }
 }
