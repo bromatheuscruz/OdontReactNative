@@ -10,8 +10,6 @@ import {
 import {
     NavigationScreenConfig,
     NavigationScreenOptions,
-    NavigationActions,
-    StackActions,
     NavigationScreenProp
 } from 'react-navigation';
 import Styles from "../Styles";

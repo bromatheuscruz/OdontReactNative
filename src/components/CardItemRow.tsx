@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         height: 100,
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 10,
+        marginVertical: 5,
         justifyContent: 'flex-start'
     },
     iconOptionStyle: {

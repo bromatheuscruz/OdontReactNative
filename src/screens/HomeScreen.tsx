@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import Styles from "../Styles";
 import Strings from "../Strings";
 import CardItemRow from "../components/CardItemRow";
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         backgroundColor: Styles.colors.concrete,
         flex: 1,
         justifyContent: 'center',
-        paddingHorizontal: 30
+        paddingHorizontal: 10
     },
     optionBlockContainer: {
         backgroundColor: Styles.colors.white,
