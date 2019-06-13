@@ -6,9 +6,13 @@ export enum IdentityTypes {
 }
 
 export interface Identity {
-    id: number;
+    token: string;
+    user: IdentityUser;
+}
+
+export interface IdentityUser {
+    id: string;
     email: string;
-    name: string;
 }
 
 export interface IdentityState {

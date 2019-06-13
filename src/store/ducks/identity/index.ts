@@ -8,9 +8,10 @@ const INITIAL_STATE: IdentityState = {
 }
 
 const reducer: Reducer<IdentityState> = (state: IdentityState = INITIAL_STATE, action) => {
+    console.log(action.type);
     switch (action.type) {
         case IdentityTypes.AUTH_REQUEST:
-            return { ...INITIAL_STATE, loading: true };
+            return { ...state, loading: true };
         case IdentityTypes.AUTH_SUCCESS:
             return { ...INITIAL_STATE, data: { ...action.payload.data } };
         case IdentityTypes.AUTH_FAILURE:

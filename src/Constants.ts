@@ -3,7 +3,7 @@ export default {
         NAME: 'Odont'
     },
     config: {
-        API_URL: 'http://localhost:3000/api'
+        API_URL: 'https://odont-api.herokuapp.com/api/rest/'
     },
     screenRoutes: {
         HOME_SCREEN: 'Home',
@@ -14,6 +14,9 @@ export default {
         LOGIN: 'Login'
     },
     api: {
-        LOGIN: '/login'
+        LOGIN: 'auth/login'
+    },
+    storageItems: {
+        TOKEN: "@odont/storage/token"
     }
 }

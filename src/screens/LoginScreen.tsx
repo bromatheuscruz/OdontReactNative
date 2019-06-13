@@ -1,24 +1,24 @@
 import React, { Component } from "react";
-import { StyleSheet, View, TextInput, Text, TouchableOpacity, ViewStyle } from "react-native";
+import { StyleSheet, View, TextInput, Text, TouchableOpacity, ViewStyle, AsyncStorage } from "react-native";
 import { NavigationScreenConfig, NavigationScreenOptions, NavigationScreenProp } from 'react-navigation';
 import Styles from "../Styles";
 import Strings from "../Strings";
-import { LoginUserData } from '../models/LoginUserData';
+import { LoginData } from '../models/LoginData';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { ApplicationState } from '../store';
-import { Identity } from "../store/ducks/identity/types";
 import * as IdentityActions from './../store/ducks/identity/actions';
+import Constants from "../Constants";
+import { IdentityUser } from "../store/ducks/identity/types";
 
 interface StateProps {
-    identity: Identity;
+    identity: IdentityUser;
     loading: boolean;
     hasError: boolean;
 }
 
 interface DispatchProps {
-    authRequest(data: LoginUserData): void;
-    authClear(): void;
+    authRequest(data: LoginData): void;
 }
 
 interface OwnProps {
@@ -28,7 +28,7 @@ interface OwnProps {
 type Props = StateProps & DispatchProps & OwnProps;
 
 interface State {
-    user: LoginUserData;
+    user: LoginData;
     canSubmitForm: boolean;
 }
 
@@ -37,7 +37,7 @@ class LoginScreen extends Component<Props, State> {
     state = {
         user: {
             email: 'bromatheuscruz@gmail.com',
-            password: 'matheus.cruz1'
+            password: '123456'
         },
         canSubmitForm: true
     }
@@ -45,37 +45,43 @@ class LoginScreen extends Component<Props, State> {
     static navigationOptions: NavigationScreenConfig<NavigationScreenOptions> = { header: null };
     private passwordInput!: TextInput;
 
-    componentDidMount() {
+    async componentDidMount() {
+        const { navigation } = this.props;
+        const token = await AsyncStorage.getItem(Constants.storageItems.TOKEN);
+        if (token) {
+            navigation.navigate(Constants.stacks.HOME);
+        }
+    }
 
+    componentDidUpdate() {
+        const { identity, navigation } = this.props;
+        if (identity && identity.id) {
+            navigation.navigate(Constants.stacks.HOME);
+        }
     }
 
     private onEmailChangeHandler = (value: string): void => {
         const { user } = this.state;
-
         const formStatus = !!(value && user.password);
-
         this.setState({ user: { ...user, email: value }, canSubmitForm: formStatus });
     }
 
     private onPasswordChangeHandler = (value: string): void => {
         const { user } = this.state;
-
         const formStatus = !!(value && user.email);
-
         this.setState({ user: { ...user, password: value }, canSubmitForm: formStatus });
     }
 
     private onLoginPressHandler = (): void => {
-        const { navigation, authRequest } = this.props;
+        const { authRequest } = this.props;
         const { user } = this.state;
-        navigation.push('mainStack');
+        authRequest(user);
     }
-
 
     render() {
         const { user, canSubmitForm } = this.state;
-        const { identity, loading, hasError } = this.props;
-        const getOpacityByFormStatus = (): ViewStyle => ({ opacity: canSubmitForm ? 1 : 0.5 })
+        const { loading } = this.props;
+        const getOpacityByFormStatus = (): ViewStyle => ({ opacity: canSubmitForm && !loading ? 1 : 0.5  });
 
         return (
             <View style={styles.loginScreen}>
@@ -187,7 +193,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: ApplicationState) => ({
-    identity: state.identity.data,
+    identity: state.identity.data.user,
     loading: state.identity.loading,
     hasError: state.identity.hasError
 });
