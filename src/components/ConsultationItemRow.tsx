@@ -3,33 +3,63 @@ import { View, StyleSheet, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Styles from "../Styles";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { ConsultationMarked } from "../models/ConsultationMarked";
+import {
+  ConsultationMarked,
+  ConsultationStatus,
+  ConsultationTypes
+} from "../models/ConsultationMarked";
+import Constants from "../Constants";
 
 interface Props {
   consultation: ConsultationMarked;
 }
 
 export default class ConsultationItemRow extends Component<Props> {
+  private resolveIcon = (): string => {
+    const { consultation } = this.props;
+    switch (consultation.status) {
+      case ConsultationStatus.FINISHED:
+        return Styles.icons.DONE;
+      case ConsultationStatus.SCHEDULE:
+        return Styles.icons.SCHEDULE;
+      case ConsultationStatus.MISSED:
+        return Styles.icons.CLEAR;
+      default:
+        return Styles.icons.SCHEDULE;
+    }
+  };
+
+  private resolveType = (): string => {
+    const { consultation } = this.props;
+    switch (consultation.type) {
+      case ConsultationTypes.MAINTENANCE:
+        return "MANUTENÇÂO";
+      case ConsultationTypes.EVALUATION:
+        return "AVALIAÇÂO";
+      default:
+        return "MANUTENÇÂO";
+    }
+  };
   render() {
     const { consultation } = this.props;
     return (
-      <TouchableOpacity style={styles.itemRowContainer}>
+      <View style={styles.itemRowContainer}>
         <View style={styles.statusContainer}>
           <Icon
-            name={Styles.icons.DONE}
+            name={this.resolveIcon()}
             color={Styles.colors.cornflowerBlue}
             size={30}
           />
         </View>
         <View style={styles.primaryInfoContainer}>
-          <Text style={styles.consultationType}>{consultation.type}</Text>
-          <Text style={styles.doctor}>{consultation.doctor}</Text>
+          <Text style={styles.consultationType}>{this.resolveType()}</Text>
+          <Text style={styles.doctor}>{consultation.doctor.name}</Text>
         </View>
         <View style={styles.secondaryInfoContainer}>
           <Text style={styles.bolder}>{consultation.day}</Text>
           <Text style={styles.bolder}>{consultation.hour}</Text>
         </View>
-      </TouchableOpacity>
+      </View>
     );
   }
 }

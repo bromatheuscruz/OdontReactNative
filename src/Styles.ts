@@ -28,6 +28,7 @@ export default {
     LOCK: "lock",
     NAVIGATE_NEXT: "navigate-next",
     EXIT_TO_APP: "exit-to-app",
-    DONE: "done"
+    DONE: "done",
+    CLEAR: "clear"
   }
 };

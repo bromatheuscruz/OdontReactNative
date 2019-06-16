@@ -8,5 +8,17 @@ export interface ConsultationMarked {
   doctor: Doctor;
   pacient: Pacient;
   description: string;
-  type: string;
+  type: ConsultationTypes;
+  status: ConsultationStatus;
+}
+
+export enum ConsultationTypes {
+  MAINTENANCE = "MAINTENANCE",
+  EVALUATION = "EVALUATION"
+}
+
+export enum ConsultationStatus {
+  FINISHED = "FINISHED",
+  SCHEDULE = "SCHEDULE",
+  MISSED = "MISSED"
 }
