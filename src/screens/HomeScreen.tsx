@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
     backgroundColor: Styles.colors.concrete,
     flex: 1,
     justifyContent: "center",
-    paddingHorizontal: 10
   },
   optionBlockContainer: {
     backgroundColor: Styles.colors.white,
